@@ -60,7 +60,7 @@ public class Utils {
 			for (User u : data) {
 				String output = u.toString() + " : ";
 				for (User u2 : data) {
-					if (u.compareTo(u2) != 0) {
+					if (u.compareTo(u2) != 0 && u.isRelated(u2)) {
 						output += u2.toString() + ", ";
 					}
 
