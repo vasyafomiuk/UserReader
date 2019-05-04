@@ -4,6 +4,7 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvToBean;
 
 public class User extends CsvToBean<User> {
+
 	@CsvBindByName(column = "first_name", required = true)
 	private String firstName;
 	@CsvBindByName(column = "last_name", required = true)

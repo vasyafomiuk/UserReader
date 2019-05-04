@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.CsvToBeanFilter;
 import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import app.resources.user.User;
@@ -27,7 +29,7 @@ public class Utils {
 	private String pathFile = ConfigurationReader.getProperty("file_path");
 
 	// this method will verify if no one exceeds 256 characters limit
-	public boolean verifyRowIsValid(String str) {
+	public boolean verifyValueIsIsNotTooLong(String str) {
 		if (str.length() < 256) {
 			return true;
 		}
