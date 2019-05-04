@@ -200,6 +200,11 @@ public class User extends CsvToBean<User> {
 			return false;
 
 		User u = (User) that; // than we can cast it to User safely
-		return this.firstName.equals(u.getFirstName()) && this.lastName.equals(u.getLastName());
+		//verify if users have same exact data
+		return this.firstName.equals(u.getFirstName()) && this.lastName.equals(u.getLastName())
+				&& this.companyName.equals(u.getCompanyName()) && this.address.equals(u.getAddress())
+				&& this.city.equals(u.getCity()) && this.province.equals(u.getProvince())
+				&& this.postal.equals(u.getPostal()) && this.phone1.equals(u.getPhone1())
+				&& this.phone2.equals(u.getPhone2()) && this.web.equals(u.getWeb());
 	}
 }
