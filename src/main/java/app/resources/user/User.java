@@ -1,18 +1,31 @@
 package app.resources.user;
 
-public class User implements Comparable<User> {
+import com.opencsv.bean.CsvBindByName;
+import com.opencsv.bean.CsvToBean;
 
-	private String lastName;
-	private String companyName;
-	private String address;
-	private String city;
-	private String province;
-	private String postal;
-	private String phone1;
-	private String phone2;
-	private String email;
-	private String web;
+public class User extends CsvToBean<User> {
+	@CsvBindByName(column = "first_name")
 	private String firstName;
+	@CsvBindByName(column = "last_name")
+	private String lastName;
+	@CsvBindByName(column = "company_name")
+	private String companyName;
+	@CsvBindByName(column = "address")
+	private String address;
+	@CsvBindByName(column = "city")
+	private String city;
+	@CsvBindByName(column = "province")
+	private String province;
+	@CsvBindByName(column = "postal")
+	private String postal;
+	@CsvBindByName(column = "phone1")
+	private String phone1;
+	@CsvBindByName(column = "phone2")
+	private String phone2;
+	@CsvBindByName(column = "email")
+	private String email;
+	@CsvBindByName(column = "web")
+	private String web;
 
 	public User(String firstName, String lastName) {
 		this.firstName = firstName;
@@ -127,27 +140,60 @@ public class User implements Comparable<User> {
 		this.web = web;
 	}
 
+	// This method identifies any similarities between two users
 	public boolean isRelated(User user) {
-		if ((user.getLastName().equals(this.lastName))
-				|| (user.getLastName().contains("-") && user.getLastName().contains(this.lastName))
-				|| (this.lastName.contains("-") && this.lastName.contains(user.getLastName()))
-				|| (user.getFirstName().contains("-") && user.getFirstName().contains(this.firstName))
-				|| (this.firstName.contains("-") && this.firstName.contains(user.getFirstName()))) {
-			return true;
+		// if first name contains -, split it to verify partially
+		if (user.getFirstName().contains("-")) {
+			String[] firstNameArr = user.getLastName().split("-");
+			if ((firstNameArr[0].contains(this.lastName)) || (this.lastName.contains(firstNameArr[0]))
+					|| (firstNameArr[1].contains(this.lastName)) || (this.lastName.contains(firstNameArr[1]))) {
+				return true;
+			} else {
+				return false;
+			}
+			// if last name contains -, split it to verify partially
+		} else if (user.getLastName().contains("-")) {
+			String[] lastNameArr = user.getLastName().split("-");
+			if ((lastNameArr[0].contains(this.lastName)) || (this.lastName.contains(lastNameArr[0]))
+					|| (lastNameArr[1].contains(this.lastName)) || (this.lastName.contains(lastNameArr[1]))) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			if ((user.getLastName().equals(this.lastName)) || (user.getLastName().contains(this.lastName))
+					|| (this.lastName.contains(user.getLastName())) || (user.getFirstName().contains(this.firstName))
+					|| (this.firstName.contains(user.getFirstName()))) {
+				return true;
+			} else {
+				return false;
+			}
 		}
-		return false;
 	}
 
 	@Override
 	public String toString() {
 		return this.firstName + " " + this.lastName;
 	}
+	
+	//to determine if user is valid
+	public boolean isValidUser() {
+		if (this.firstName.isEmpty() || this.firstName == null || this.lastName.isEmpty() || this.lastName == null
+				|| this.email.isEmpty() || this.email == null) {
+			return false;
+		}
+		return true;
+	}
 
 	@Override
-	public int compareTo(User o) {
-		if (this.getFirstName().equals(o.getFirstName()) && this.lastName.equals(o.getLastName())) {
-			return 0;
-		}
-		return -1;
+	public boolean equals(Object that) {
+		if (this == that)
+			return true;// if both of them points the same address in memory
+
+		if (!(that instanceof User))
+			return false;
+
+		User u = (User) that; // than we can cast it to User safely
+		return this.firstName.equals(u.getFirstName()) && this.lastName.equals(u.getLastName());
 	}
 }

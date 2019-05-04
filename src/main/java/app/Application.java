@@ -12,7 +12,8 @@ public class Application {
 		Utils utils = new Utils();
 		utils.displayOption();
 		utils.setPathToTheFile(scan);
-		List<User> users = utils.readCSV();
+		List<User> users = utils.parseData();
 		utils.findRelatedPeople(users);
+		utils.displayFinalMessage();
 	}
 }
