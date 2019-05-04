@@ -111,7 +111,7 @@ public class Utils {
 		System.out.println("******************************************");
 		System.out.println("*Plese select source for reading a file: *");
 		System.out.println("* 1. Default (from properties file).     *");
-		System.out.println("* 2. Other.							     *");
+		System.out.println("* 2. Other.			         *");
 		System.out.println("******************************************");
 	}
 
