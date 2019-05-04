@@ -1,0 +1,4 @@
+04.05.2019 00:17:24 DEBUG Utils:64 - first_name is not valid
+04.05.2019 00:17:24 DEBUG Utils:39 - Row 0 has invalid data: [first_name, last_name, company_name, address, city, province, postal, phone1, phone2, email, web]
+04.05.2019 00:17:24 DEBUG Utils:73 - 519-978-6179 is not valid
+04.05.2019 00:17:24 DEBUG Utils:39 - Row 1 has invalid data: [Tom, William, Riebesell,  H F Jr, 2335 Canton Hwy #6, Windsor, ON, N8N 3N2, 519-569-8399, 519-978-6179, tom.william@rautenstrauch.com, http://www.riebesellhfjr.com]
