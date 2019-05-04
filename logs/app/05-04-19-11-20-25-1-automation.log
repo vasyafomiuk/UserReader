@@ -1,0 +1,2 @@
+04.05.2019 11:20:24 ERROR Utils:155 - Both mapping strategy and CSVReader/Reader must be specified!
+04.05.2019 11:20:24 ERROR Utils:44 - java.lang.IllegalStateException: Both mapping strategy and CSVReader/Reader must be specified!

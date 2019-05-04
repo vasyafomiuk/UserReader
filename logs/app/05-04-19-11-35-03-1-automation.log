@@ -1,0 +1,2 @@
+04.05.2019 11:35:03 DEBUG Utils:36 - Row 1 :  User = [ First Name="null", Last name"Scott-William", company name="Oklahoma Neon Inc", address="9547 Belmont Rd #21", city="Belleville", province="ON", postal="K8P 1B3", phone1="613-903-7043", phone2="613-638-6682", email="jake_scottwilliam@aol.com", web="http://www.oklahomaneoninc.com"]
+04.05.2019 11:35:03 ERROR Utils:45 - null

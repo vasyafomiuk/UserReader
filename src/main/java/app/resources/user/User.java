@@ -4,27 +4,27 @@ import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvToBean;
 
 public class User extends CsvToBean<User> {
-	@CsvBindByName(column = "first_name")
+	@CsvBindByName(column = "first_name", required = true)
 	private String firstName;
-	@CsvBindByName(column = "last_name")
+	@CsvBindByName(column = "last_name", required = true)
 	private String lastName;
-	@CsvBindByName(column = "company_name")
+	@CsvBindByName(column = "company_name", required = false)
 	private String companyName;
-	@CsvBindByName(column = "address")
+	@CsvBindByName(column = "address", required = false)
 	private String address;
-	@CsvBindByName(column = "city")
+	@CsvBindByName(column = "city", required = false)
 	private String city;
-	@CsvBindByName(column = "province")
+	@CsvBindByName(column = "province", required = false)
 	private String province;
-	@CsvBindByName(column = "postal")
+	@CsvBindByName(column = "postal", required = false)
 	private String postal;
-	@CsvBindByName(column = "phone1")
+	@CsvBindByName(column = "phone1", required = false)
 	private String phone1;
-	@CsvBindByName(column = "phone2")
+	@CsvBindByName(column = "phone2", required = false)
 	private String phone2;
-	@CsvBindByName(column = "email")
+	@CsvBindByName(column = "email", required = true)
 	private String email;
-	@CsvBindByName(column = "web")
+	@CsvBindByName(column = "web", required = false)
 	private String web;
 
 	public User(String firstName, String lastName) {
@@ -173,16 +173,21 @@ public class User extends CsvToBean<User> {
 
 	@Override
 	public String toString() {
+		return " User = [ First Name=\"" + this.firstName + "\", Last name\"" + this.lastName + "\", company name=\""
+				+ this.companyName + "\", address=\"" + this.address + "\", city=\"" + this.city + "\", province=\""
+				+ this.province + "\", postal=\"" + this.postal + "\", phone1=\"" + this.phone1 + "\", phone2=\""
+				+ this.phone2 + "\", email=\"" + this.email + "\", web=\"" + this.web + "\"]";
+	}
+
+	public String getFullName() {
 		return this.firstName + " " + this.lastName;
 	}
-	
-	//to determine if user is valid
+
+	// to determine if user is valid
 	public boolean isValidUser() {
-		if (this.firstName.isEmpty() || this.firstName == null || this.lastName.isEmpty() || this.lastName == null
-				|| this.email.isEmpty() || this.email == null) {
-			return false;
-		}
-		return true;
+		boolean isNotEmpty = this.firstName.isEmpty() || this.firstName == null || this.lastName.isEmpty()
+				|| this.lastName == null || this.email.isEmpty() || this.email == null;
+		return isNotEmpty;
 	}
 
 	@Override

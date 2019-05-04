@@ -12,8 +12,9 @@ public class Application {
 		Utils utils = new Utils();
 		utils.displayOption();
 		utils.setPathToTheFile(scan);
-		List<User> users = utils.parseData();
+		List<User> users = utils.readAllDataAtOnce();
 		utils.findRelatedPeople(users);
 		utils.displayFinalMessage();
+		scan.close();
 	}
 }

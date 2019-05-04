@@ -7,8 +7,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 import org.apache.commons.validator.routines.EmailValidator;
@@ -16,7 +17,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.opencsv.CSVReader;
-import com.opencsv.CSVReaderBuilder;
+import com.opencsv.bean.CsvToBean;
+import com.opencsv.bean.CsvToBeanBuilder;
+import com.opencsv.bean.HeaderColumnNameTranslateMappingStrategy;
 
 import app.resources.user.User;
 
@@ -24,34 +27,12 @@ public class Utils {
 	private static final Logger logger = LogManager.getLogger();
 	private String pathFile = ConfigurationReader.getProperty("file_path");
 
-	// this method will filter data and create list of users with 2 params only
-	public List<User> parseData() {
-		ArrayList<User> values = new ArrayList<>();
-		try {
-			int i = 0;
-			for (String[] row : readAllDataAtOnce()) {
-				logger.debug("Row " + ++i + " : " + Arrays.toString(row));
-				if (isValidName(row[0]) && isValidName(row[1]) && verifyRowIsValid(row)
-						&& isValidEmailAddress(row[9])) {
-					values.add(new User(row[0].trim(), row[1].trim()));
-				} else {
-					logger.error(String.format("Row %d has invalid data: %s", i, Arrays.toString(row)));
-				}
-			}
-		} catch (Exception e) {
-			logger.error(e.getMessage());
-			throw new RuntimeException(e);
-		}
-		return values;
-	}
-
 	// this method will verify if no one exceeds 256 characters limit
-	public boolean verifyRowIsValid(String[] arr) {
-		boolean match = Arrays.asList(arr).stream().allMatch(p -> p.length() <= 256);
-		if (match) {
+	public boolean verifyRowIsValid(String str) {
+		if (str.length() < 256) {
 			return true;
 		}
-		logger.error("Unable to proccess row. Some values are too long.");
+		logger.error("Unable to proccess. Value is too long.");
 		return false;
 	}
 
@@ -88,11 +69,11 @@ public class Utils {
 			}
 
 			for (User u : data) {
-				String output = u.toString() + " : ";
+				String output = u.getFullName() + " : ";
 				for (User u2 : data) {
 					// compare 2 users, and if it's no the same user in order to avoid duplicates
 					if ((!u.equals(u2)) && u.isRelated(u2)) {
-						output += u2.toString() + ", ";
+						output += u2.getFullName() + ", ";
 					}
 
 				}
@@ -135,16 +116,34 @@ public class Utils {
 		}
 	}
 
-	public List<String[]> readAllDataAtOnce() {
-		List<String[]> allData = new ArrayList<>();
+	public List<User> readAllDataAtOnce() {
+		List<User> allData = new ArrayList<>();
 		try {
 			// Create an object of file reader
 			// class with CSV file as a parameter.
 			FileReader filereader = new FileReader(pathFile);
-
-			// create csvReader object and skip first Line
-			CSVReader csvReader = new CSVReaderBuilder(filereader).withSkipLines(1).build();
-			allData = csvReader.readAll();
+			// set mapping strategy
+			Map<String, String> mapping = new HashMap<String, String>();
+			mapping.put("first_name", "firstName");
+			mapping.put("last_name", "lastName");
+			mapping.put("company_name", "companyName");
+			mapping.put("address", "address");
+			mapping.put("city", "city");
+			mapping.put("province", "province");
+			mapping.put("postal", "postal");
+			mapping.put("phone1", "phone1");
+			mapping.put("phone2", "phone2");
+			mapping.put("email", "email");
+			mapping.put("web", "web");
+			HeaderColumnNameTranslateMappingStrategy<User> strategy = new HeaderColumnNameTranslateMappingStrategy<User>();
+			strategy.setType(User.class);
+			strategy.setColumnMapping(mapping);
+			// Parse one row at a time
+			final CsvToBean<User> csv = new CsvToBeanBuilder<User>(filereader).withType(User.class)
+		            .withOrderedResults(false)
+		            .withMappingStrategy(strategy)
+		            .build();
+			allData = csv.parse();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);

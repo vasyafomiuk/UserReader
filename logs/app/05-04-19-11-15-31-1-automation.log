@@ -1,0 +1,2 @@
+04.05.2019 11:15:30 DEBUG Utils:35 - Row 1 :  firstname="null", last name"null", company name="null", address="null", city="null", province="null", postal="null", phone1="null", phone2="null", email="null", web="null"
+04.05.2019 11:15:30 ERROR Utils:44 - null
