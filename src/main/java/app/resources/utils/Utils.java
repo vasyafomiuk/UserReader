@@ -145,6 +145,7 @@ public class Utils {
 		            .withMappingStrategy(strategy)
 		            .build();
 			allData = csv.parse();
+			allData.removeIf(p -> p.isInvalidUser());
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new RuntimeException(e);

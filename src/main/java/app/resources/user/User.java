@@ -1,9 +1,13 @@
 package app.resources.user;
 
+import com.opencsv.bean.BeanVerifier;
 import com.opencsv.bean.CsvBindByName;
 import com.opencsv.bean.CsvToBean;
+import com.opencsv.exceptions.CsvConstraintViolationException;
 
-public class User extends CsvToBean<User> {
+import app.resources.utils.Utils;
+
+public class User extends CsvToBean<User> implements BeanVerifier {
 
 	@CsvBindByName(column = "first_name", required = true)
 	private String firstName;
@@ -185,10 +189,16 @@ public class User extends CsvToBean<User> {
 	}
 
 	// to determine if user is valid
-	public boolean isValidUser() {
-		boolean isNotEmpty = this.firstName.isEmpty() || this.firstName == null || this.lastName.isEmpty()
-				|| this.lastName == null || this.email.isEmpty() || this.email == null;
-		return isNotEmpty;
+	public boolean isInvalidUser() {
+		Utils util = new Utils();
+		boolean isInvalid = util.verifyValueIsIsNotTooLong(this.firstName)
+				&& util.verifyValueIsIsNotTooLong(this.lastName) && util.verifyValueIsIsNotTooLong(this.companyName)
+				&& util.verifyValueIsIsNotTooLong(this.address) && util.verifyValueIsIsNotTooLong(this.city)
+				&& util.verifyValueIsIsNotTooLong(this.phone1) && util.verifyValueIsIsNotTooLong(this.phone2)
+				&&util.verifyValueIsIsNotTooLong(this.email)&& util.verifyValueIsIsNotTooLong(this.postal)
+				&&util.verifyValueIsIsNotTooLong(this.web);
+
+		return !isInvalid;
 	}
 
 	@Override
@@ -200,11 +210,17 @@ public class User extends CsvToBean<User> {
 			return false;
 
 		User u = (User) that; // than we can cast it to User safely
-		//verify if users have same exact data
+		// verify if users have same exact data
 		return this.firstName.equals(u.getFirstName()) && this.lastName.equals(u.getLastName())
 				&& this.companyName.equals(u.getCompanyName()) && this.address.equals(u.getAddress())
 				&& this.city.equals(u.getCity()) && this.province.equals(u.getProvince())
 				&& this.postal.equals(u.getPostal()) && this.phone1.equals(u.getPhone1())
 				&& this.phone2.equals(u.getPhone2()) && this.web.equals(u.getWeb());
+	}
+
+	@Override
+	public boolean verifyBean(Object bean) throws CsvConstraintViolationException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
