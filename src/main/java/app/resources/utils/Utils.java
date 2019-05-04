@@ -147,6 +147,7 @@ public class Utils {
 			allData = csvReader.readAll();
 		} catch (Exception e) {
 			logger.error(e.getMessage());
+			throw new RuntimeException(e);
 		}
 		return allData;
 	}
